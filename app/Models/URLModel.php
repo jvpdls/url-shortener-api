@@ -121,32 +121,32 @@ class URLModel extends Model
             $shortlink["newSlug"]
         );
 
-        if ($oldShortlinkExists) {
-            if ($shortlink["oldSlug"] === $shortlink["newSlug"]) {
-                $updated = $this->where("slug", $shortlink["oldSlug"])
-                    ->set([
-                        "longUrl" => $shortlink["newLongUrl"],
-                    ])
-                    ->update();
-            } elseif (!$newShortlinkExists) {
-                $updated = $this->where("slug", $shortlink["oldSlug"])
-                    ->set([
-                        "longUrl" => $shortlink["newLongUrl"],
-                        "slug" => $shortlink["newSlug"],
-                    ])
-                    ->update();
-            } else {
-                throw new ShortlinkExistsException();
-            }
-
-            if (!$updated) {
-                throw new Exception("Failed to update shortlink");
-            } else {
-                return true;
-            }
-        } else {
+        if (!$oldShortlinkExists) {
             throw new NoDataFoundException();
         }
+
+        if ($shortlink["oldSlug"] === $shortlink["newSlug"]) {
+            $updated = $this->where("slug", $shortlink["oldSlug"])
+                ->set([
+                    "longUrl" => $shortlink["newLongUrl"],
+                ])
+                ->update();
+        } elseif ($newShortlinkExists) {
+            throw new ShortlinkExistsException();
+        } else {
+            $updated = $this->where("slug", $shortlink["oldSlug"])
+                ->set([
+                    "longUrl" => $shortlink["newLongUrl"],
+                    "slug" => $shortlink["newSlug"],
+                ])
+                ->update();
+        }
+
+        if (!$updated) {
+            throw new Exception("Failed to update shortlink");
+        }
+
+        return true;
     }
 
     /**
