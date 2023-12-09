@@ -15,22 +15,45 @@ use App\Exceptions\ShortlinkExistsException;
  */
 class URLModel extends Model
 {
+    /**
+     * The name of the database table.
+     *
+     * @var string
+     */
     protected $table = "shortlinks";
+
+    /**
+     * The primary key column name.
+     *
+     * @var string
+     */
     protected $primaryKey = "ID";
+
+    /**
+     * The fields that are allowed to be mass assigned.
+     *
+     * @var array
+     */
     protected $allowedFields = ["longUrl", "slug"];
+
+    /**
+     * The validation rules for the model fields.
+     *
+     * @var array
+     */
     protected $validationRules = [
         "longUrl" => "required|valid_url_strict",
         "slug" => "required|is_unique[shortlinks.slug]",
     ];
 
     /**
-     * Handle the find function result.
-     * 
+     * Handles the find function result.
+     *
      * @param mixed $resource The result of the find function.
      * @return mixed The resource if not empty, otherwise throws a NoDataFoundException.
-     * @throws NoDataFoundException If the resource is empty.
+     * @throws NoDataFoundException
      */
-    private function _handleFindFunction($resource)
+    private function handleFindFunction($resource)
     {
         if (empty($resource)) {
             throw new NoDataFoundException();
@@ -40,57 +63,53 @@ class URLModel extends Model
     }
 
     /**
-     * Check if a shortlink with the given slug exists.
-     * 
+     * Checks if a shortlink with the given slug exists.
+     *
      * @param string $slug The slug of the shortlink.
-     * @return bool True if the shortlink exists, false otherwise.
+     * @return bool Returns true if the shortlink exists, false otherwise.
      */
-    private function _checkIfShortlinkExists($slug)
+    private function checkIfShortlinkExists($slug)
     {
         $shortlinkExists = $this->where("slug", $slug)->findAll();
-        if (!empty($shortlinkExists)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !empty($shortlinkExists);
     }
 
     /**
-     * Get all shortlinks.
-     * 
+     * Retrieves all shortlinks from the database.
+     *
      * @return mixed All shortlinks if found, otherwise throws a NoDataFoundException.
-     * @throws NoDataFoundException If no shortlinks are found.
+     * @throws NoDataFoundException
      */
     public function getAllShortlinks()
     {
         $allShortlinks = $this->findAll();
-        return $this->_handleFindFunction($allShortlinks);
+        return $this->handleFindFunction($allShortlinks);
     }
 
     /**
-     * Get a shortlink by slug.
-     * 
+     * Retrieves a shortlink with the given slug from the database.
+     *
      * @param string $slug The slug of the shortlink.
      * @return mixed The shortlink if found, otherwise throws a NoDataFoundException.
-     * @throws NoDataFoundException If the shortlink is not found.
+     * @throws NoDataFoundException
      */
     public function getShortlink($slug)
     {
         $shortlink = $this->where("slug", $slug)->findAll();
-        return $this->_handleFindFunction($shortlink);
+        return $this->handleFindFunction($shortlink);
     }
 
     /**
-     * Create a new shortlink.
-     * 
-     * @param array $shortlink The shortlink data.
-     * @return bool True if the shortlink is created successfully, otherwise throws an exception.
-     * @throws Exception If failed to insert the shortlink.
-     * @throws ShortlinkExistsException If the shortlink slug already exists.
+     * Creates a new shortlink in the database.
+     *
+     * @param array $shortlink The shortlink data to be inserted.
+     * @return bool Returns true if the shortlink is successfully created, otherwise throws an exception.
+     * @throws Exception
+     * @throws ShortlinkExistsException
      */
     public function createShortlink($shortlink)
     {
-        $shortlinkExists = $this->_checkIfShortlinkExists($shortlink["slug"]);
+        $shortlinkExists = $this->checkIfShortlinkExists($shortlink["slug"]);
         if (!$shortlinkExists) {
             $inserted = $this->insert($shortlink);
             if ($inserted) {
@@ -104,22 +123,18 @@ class URLModel extends Model
     }
 
     /**
-     * Update an existing shortlink.
-     * 
-     * @param array $shortlink The updated shortlink data.
-     * @return bool True if the shortlink is updated successfully, otherwise throws an exception.
-     * @throws Exception If failed to update the shortlink.
-     * @throws NoDataFoundException If the old shortlink slug is not found.
-     * @throws ShortlinkExistsException If the new shortlink slug already exists.
+     * Updates an existing shortlink in the database.
+     *
+     * @param array $shortlink The shortlink data to be updated.
+     * @return bool Returns true if the shortlink is successfully updated, otherwise throws an exception.
+     * @throws Exception
+     * @throws NoDataFoundException
+     * @throws ShortlinkExistsException
      */
     public function updateShortlink($shortlink)
     {
-        $oldShortlinkExists = $this->_checkIfShortlinkExists(
-            $shortlink["oldSlug"]
-        );
-        $newShortlinkExists = $this->_checkIfShortlinkExists(
-            $shortlink["newSlug"]
-        );
+        $oldShortlinkExists = $this->checkIfShortlinkExists($shortlink["oldSlug"]);
+        $newShortlinkExists = $this->checkIfShortlinkExists($shortlink["newSlug"]);
 
         if (!$oldShortlinkExists) {
             throw new NoDataFoundException();
@@ -150,16 +165,16 @@ class URLModel extends Model
     }
 
     /**
-     * Delete a shortlink by slug.
-     * 
-     * @param string $slug The slug of the shortlink to delete.
-     * @return bool True if the shortlink is deleted successfully, otherwise throws an exception.
-     * @throws Exception If failed to delete the shortlink.
-     * @throws NoDataFoundException If the shortlink is not found.
+     * Deletes a shortlink with the given slug from the database.
+     *
+     * @param string $slug The slug of the shortlink to be deleted.
+     * @return bool Returns true if the shortlink is successfully deleted, otherwise throws an exception.
+     * @throws Exception
+     * @throws NoDataFoundException
      */
     public function deleteShortlink($slug)
     {
-        $shortlinkExists = $this->_checkIfShortlinkExists($slug);
+        $shortlinkExists = $this->checkIfShortlinkExists($slug);
 
         if ($shortlinkExists) {
             $deleted = $this->where("slug", $slug)->delete();
