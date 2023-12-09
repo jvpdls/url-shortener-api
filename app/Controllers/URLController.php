@@ -77,8 +77,8 @@ class URLController extends ResourceController
         $shortlink = [];
 
         try {
-            $shortlink["longUrl"] = $this->request->getPost("longUrl");
-            $shortlink["slug"] = $this->request->getPost("slug");
+            $shortlink["longUrl"] = $this->request->getVar("longUrl");
+            $shortlink["slug"] = $this->request->getVar("slug");
             if (empty($shortlink["longUrl"]) || empty($shortlink["slug"])) {
                 throw new ParamsMissingException();
             } else {
