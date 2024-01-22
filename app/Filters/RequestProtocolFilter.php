@@ -24,6 +24,8 @@ class RequestProtocolFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
+        $request = \Config\Services::request();
+
         if (!$request->isSecure()) {
             $response = service('response');
             $response->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
