@@ -12,7 +12,7 @@ This project showcases a REST API for a URL shortener tool, developed using Code
 
 1. Clone this repo: `git clone https://github.com/jvpdls/url-shortener-api.git`;
 2. Run the script at `sql/createDatabase.sql` onto your MySQL client;
-3. Install the project's dependencies: `composer install`;
+3. Navigate to the project's folder and install its dependencies: `composer install`;
 4. Run it locally: `php spark serve`;
 5. Send requests through the command-line or using tools such as Insomnia and Postman.
 
