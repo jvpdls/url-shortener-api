@@ -7,6 +7,6 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/get', 'URLController::getAllShortlinks');
 $routes->get('/get/(:segment)', 'URLController::getShortlink/$1');
-$routes->post('/create', 'URLController::createShortlink', ['filter' => 'apiAuth']);
-$routes->put('/update', 'URLController::updateShortlink', ['filter' => 'apiAuth']);
-$routes->delete('/delete/(:segment)', 'URLController::deleteShortlink/$1', ['filter' => 'apiAuth']);
+$routes->post('/create', 'URLController::createShortlink', ['filters' => ['apiAuth', 'requestProtocol']]);
+$routes->put('/update', 'URLController::updateShortlink', ['filters' => ['apiAuth', 'requestProtocol']]);
+$routes->delete('/delete/(:segment)', 'URLController::deleteShortlink/$1', ['filters' => ['apiAuth', 'requestProtocol']]);

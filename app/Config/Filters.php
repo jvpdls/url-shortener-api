@@ -26,6 +26,7 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'apiAuth' => \App\Filters\APIAuthFilter::class,
+        'requestProtocol' => \App\Filters\RequestProtocolFilter::class,
     ];
 
     /**
@@ -41,6 +42,7 @@ class Filters extends BaseConfig
             // 'csrf',
             // 'invalidchars',
             'apiAuth' => ['except' => ['/get', '/get/*']],
+            'requestProtocol' => ['except' => ['/get', '/get/*']],
         ],
         'after' => [
             'toolbar',
