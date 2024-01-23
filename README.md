@@ -26,13 +26,13 @@ Refer to the project's filters (`app/Filters`) for details.
 
 Below, you'll find the project's routes. All of them return JSON responses. Body params must be sent as JSON as well; URL params are sent via the request endpoint.
 
-| Route              | Method | URL Params | Body Params                              | Description                               |
-| ------------------ | ------ | ---------- | ---------------------------------------- | ----------------------------------------- |
-| /get               | GET    | -          | -                                        | Retrieve a list of all short links        |
-| /get/(:segment)    | GET    | $1(slug)   | -                                        | Retrieve details of a specific short link |
-| /create            | POST   | -          | slug, longUrl                            | Create a new short link                   |
-| /update            | UPDATE | -          | oldSlug, newSlug; oldLongUrl, newLongUrl | Update an existing short link             |
-| /delete/(:segment) | DELETE | $1(slug)   | -                                        | Delete an existing short link             |
+| Route        | Method | Body Params                              | Description                               |
+| ------------ | ------ | ---------------------------------------- | ----------------------------------------- |
+| /get         | GET    | -                                        | Retrieve a list of all short links        |
+| /get/slug    | GET    | -                                        | Retrieve details of a specific short link |
+| /create      | POST   | slug, longUrl                            | Create a new short link                   |
+| /update      | UPDATE | oldSlug, newSlug; oldLongUrl, newLongUrl | Update an existing short link             |
+| /delete/slug | DELETE | -                                        | Delete an existing short link             |
 
 ## Contributions
 
