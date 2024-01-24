@@ -22,7 +22,7 @@ class APIAuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        $key = $request->getHeaderLine('API-Key');
+        $key = $request->getHeaderLine('X-API-Key');
         
         if ($key != getenv('API_KEY')) {
             $response = service('response');

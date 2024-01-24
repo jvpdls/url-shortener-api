@@ -18,7 +18,7 @@ This is a REST API for a URL shortener tool built with CodeIgniter 4.
 
 ## Authentication
 
-Except for GET requests, send the "API-Key" header for authentication. The API only accepts HTTPS requests. Configure the API secret in the .env file at the project's root, using the "API_KEY" variable.
+Except for GET requests, send the "X-API-Key" header for authentication. The API only accepts HTTPS requests. Run `php generateApiKey.php` to generate an API Key.
 
 Refer to the project's filters (`app/Filters`) for details.
 
